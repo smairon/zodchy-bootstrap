@@ -1,0 +1,38 @@
+import functools
+
+import fire
+import alembic_tools
+from envparse import env
+
+import specs
+import ports
+{% if need_authentication %}import scripts{% endif %}
+
+if __name__ == "__main__":
+    env.read_envfile()
+
+    migrations_pool_config = specs.configs.storage.rdbs.MigrationsPoolConfig()
+    db_pool_config = specs.configs.storage.rdbs.DBPoolConfig()
+
+    migrations_rdbs_args = dict(
+        db_dsn=migrations_pool_config.dsn,
+        metadata=ports.rdbs.schema.db_metadata,
+        migrations_source=ports.rdbs.migrations,
+    )
+
+    fire.Fire({
+        "api:run": ports.api.run,
+        "rdbs:seed": functools.partial(ports.rdbs.seed.process, dsn=db_pool_config.dsn), {% if need_authentication %}
+        "auth:token": scripts.auth.generate_access_token, {% endif %}
+        "rdbs:upgrade": functools.partial(alembic_tools.commands.upgrade, **migrations_rdbs_args),
+        "rdbs:downgrade": functools.partial(alembic_tools.commands.downgrade, **migrations_rdbs_args),
+        "rdbs:create_auto_migration": lambda message: functools.partial(
+            alembic_tools.commands.create_auto_migration,
+            message=message,
+            offline=False,
+            **migrations_rdbs_args
+        ),
+        "rdbs:create_empty_migration": lambda message: functools.partial(
+            alembic_tools.commands.create_empty_migration, message=message, **migrations_rdbs_args
+        ),
+    })

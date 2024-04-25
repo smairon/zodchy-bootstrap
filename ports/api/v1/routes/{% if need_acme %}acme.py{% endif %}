@@ -1,0 +1,38 @@
+from zodchy_fastapi import router
+from . import v1
+from ..contracts import schema
+from ..endpoints import acme
+
+TAGS = ['Acme']
+
+v1.add_api_route(
+    path='/acme',
+    endpoint=acme.create,
+    responses=router.response_schema(schema.acme.SomethingCreatedResponse, 422, 500),
+    methods=['POST'],
+    tags=TAGS
+)
+
+v1.add_api_route(
+    path='/acme/{acme_id}',
+    endpoint=acme.update,
+    responses=router.response_schema(None, 422, 500),
+    methods=['PUT'],
+    tags=TAGS
+)
+
+v1.add_api_route(
+    path='/acmes',
+    endpoint=acme.roster,
+    responses=router.response_schema(schema.acme.SomethingListResponse, 500),
+    methods=['GET'],
+    tags=TAGS
+)
+
+v1.add_api_route(
+    path='/acme/{acme_id}',
+    endpoint=acme.item,
+    responses=router.response_schema(schema.acme.SomethingItemResponse, 500),
+    methods=['GET'],
+    tags=TAGS
+)

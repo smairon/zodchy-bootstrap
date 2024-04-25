@@ -1,0 +1,56 @@
+import dataclasses
+import datetime
+
+import zodchy
+from zodchy_patterns import events
+
+from .. import types
+
+
+@dataclasses.dataclass
+class CreateSomething(zodchy.codex.Command):
+    name: str
+
+
+@dataclasses.dataclass
+class UpdateSomething(zodchy.codex.Command):
+    id: types.IdentifierType
+    name: str | types.NoValueType = types.NoValueType
+    state: types.AcmeState | types.NoValueType = types.NoValueType
+
+
+@dataclasses.dataclass
+class SomethingCreated(zodchy.codex.BDEvent):
+    id: types.IdentifierType
+    name: str
+
+
+@dataclasses.dataclass
+class SomethingLinkedWithExternalService(events.HttpInfo):
+    id: types.IdentifierType
+    name: str
+    external_id: types.IdentifierType
+
+
+@dataclasses.dataclass
+class SomeItemReceived(events.HttpItemInfo):
+    pass
+
+
+@dataclasses.dataclass
+class LinkingSomethingFailed(events.HttpError):
+    pass
+
+
+@dataclasses.dataclass
+class GetListOfSomething(zodchy.codex.Query):
+    id: zodchy.codex.query.ClauseBit[types.IdentifierType] | None = None
+    name: zodchy.codex.query.ClauseBit[str] | None = None
+    state: zodchy.codex.query.ClauseBit[types.AcmeState] | None = None
+    created_at: zodchy.codex.query.ClauseBit[datetime.datetime] | None = None
+    limit: zodchy.codex.query.Limit | None = None
+
+
+@dataclasses.dataclass
+class GetSomething(zodchy.codex.Query):
+    id: types.IdentifierType

@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  {{ app_name }}:
+    build: .
+    networks:
+      - {{ docker_external_network }}
+    command: [ "api:run" ]
+    env_file:
+      - .env.docker
+    ports:
+      - "{{ app_port }}:80"
+    volumes:
+      - .:/opt/app
+
+  {% if docker_include_rdbs %}
+  {{ app_name }}_db:
+    image: postgres:{{ rdbs_version }}
+    restart: always
+    environment:
+      POSTGRES_USER: {{ rdbs_user }}
+      POSTGRES_PASSWORD: {{ rdbs_password }}
+      POSTGRES_DB: {{ rdbs_db_name }}
+    ports:
+      - {{ rdbs_port }}:5432
+    volumes:
+      - {{ app_name }}_db_volume:/var/lib/postgresql/data
+  {% endif %}
+
+{% if docker_use_external_network %}
+networks:
+  {{ docker_external_network }}:
+    external: true
+{% endif %}
+
+{% if docker_include_rdbs %}
+volumes:
+  {{ app_name }}_db_volume:
+{% endif %}

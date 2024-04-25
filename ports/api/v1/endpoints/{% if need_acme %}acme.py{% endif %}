@@ -1,0 +1,55 @@
+import specs
+import typing
+
+from .. import contracts
+from . import generic
+
+
+async def create(
+    request: contracts.Request,
+    payload: contracts.schema.acme.SomethingCreateRequest
+):
+    stream = await generic.execute_command(
+        message=specs.messages.CreateSomething(
+            name=payload.name
+        ),
+        request=request
+    )
+    return generic.format_response(stream)
+
+
+async def update(
+    request: contracts.Request,
+    something_id: specs.types.IdentifierType,
+    payload: contracts.schema.acme.SomethingUpdateRequest
+):
+    stream = await generic.execute_command(
+        specs.messages.UpdateSomething(
+            id=something_id,
+            **payload.model_dump(exclude_unset=True)
+        ),
+        request=request
+    )
+    return generic.format_response(stream)
+
+
+async def roster(
+    request: contracts.Request,
+    payload: typing.Annotated[contracts.schema.acme.SomethingListRequest, contracts.Embedded()],
+):
+    stream = await generic.execute_command(
+        message=payload(specs.messages.GetListOfSomething),
+        request=request
+    )
+    return generic.format_response(stream)
+
+
+async def item(
+    request: contracts.Request,
+    something_id: specs.types.IdentifierType
+):
+    stream = await generic.execute_command(
+        message=specs.messages.GetSomething(id=something_id),
+        request=request
+    )
+    return generic.format_response(stream)

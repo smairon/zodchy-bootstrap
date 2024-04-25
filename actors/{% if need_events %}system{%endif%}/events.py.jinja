@@ -1,0 +1,36 @@
+import collections.abc
+import uuid
+
+import hermitage
+from zodchy import codex
+
+import specs
+from ports.rdbs import schema
+
+# Add here functions to extract context from events to store it with event
+context_extractor_registry = {
+    {% if need_acme %}specs.messages.UpdateSomething: lambda m: {'name': m.name, 'state': m.state.value}, {% endif %}
+}
+
+
+async def event_keeper(
+    events: collections.abc.Iterable[codex.Event],
+    client: specs.contracts.WriteClientContract,
+):
+    data = []
+    for event in events:
+        for _type in type(event).__mro__:
+            if executor := context_extractor_registry.get(_type):
+                data.append(
+                    hermitage.Row(
+                        id=uuid.uuid4(),
+                        name=_type.__name__,
+                        **executor(event)
+                    )
+                )
+    if data:
+        invoice = specs.contracts.WriteInvoice(
+            schema.event.name,
+            *data
+        )
+        await client(invoice)

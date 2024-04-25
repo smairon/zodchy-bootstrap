@@ -1,0 +1,83 @@
+# questions
+app_name:
+  type: str
+  help: Define application name
+  default: superapp
+need_docker:
+  type: bool
+  help: Would you like to use docker?
+  default: true
+docker_use_external_network:
+  type: bool
+  help: Would you like to define external docker network?
+  default: true
+  when: "{{ need_docker == True }}"
+docker_external_network:
+  type: str
+  help: Define external docker network
+  default: "superapp_network"
+  when: "{{ docker_use_external_network == True }}"
+docker_include_rdbs:
+  type: bool
+  help: Include rdbs to docker-compose file?
+  default: true
+  when: "{{ need_docker == True }}"
+app_port:
+  type: int
+  help: Define application port to launch at
+  default: 8040
+app_workers_num:
+  type: int
+  help: Define number of workers
+  default: 1
+need_rdbs:
+  type: bool
+  help: Would you like to use RDBS?
+  default: true
+rdbs_version:
+  type: str
+  help: Define version of RDBS
+  default: 16
+  when: "{{ need_rdbs == True }}"
+rdbs_host:
+  type: str
+  help: Define host of RDBS
+  default: localhost
+  when: "{{ need_rdbs == True }}"
+rdbs_port:
+  type: int
+  help: Define port of RDBS
+  default: 5432
+  when: "{{ need_rdbs == True }}"
+rdbs_user:
+  type: str
+  help: Define RDBS user
+  default: postgres
+  when: "{{ need_rdbs == True }}"
+rdbs_password:
+  type: str
+  help: Define password of RDBS
+  default: postgres
+  when: "{{ need_rdbs == True }}"
+rdbs_db_name:
+  type: str
+  help: Define database name
+  default: "{{ app_name }}"
+  when: "{{ need_rdbs == True }}"
+need_authentication:
+  type: bool
+  help: Would you like to add authentication?
+  default: true
+jwt_secret:
+  type: str
+  help: Define JWT secret
+  default: "N2Mnabs1kdjs3pLm1"
+  when: "{{ need_authentication == True }}"
+need_acme:
+  type: bool
+  help: Generate examples?
+  default: true
+need_events:
+  type: bool
+  help: Would you like to store events?
+  default: true

@@ -1,0 +1,9 @@
+import dataclasses
+from zodchy import codex
+
+from .. import types
+
+
+@dataclasses.dataclass
+class CreateSomethingAuditContext(codex.Context):
+    user_id: types.IdentifierType

@@ -1,0 +1,10 @@
+run:
+    python cli.py api:run
+{% if need_docker %}
+up:
+	docker network inspect {{ docker_external_network }} >/dev/null 2>&1 \
+    || docker network create --driver bridge {{ docker_external_network }}
+	docker-compose up --build -d
+down:
+	docker-compose down
+{% endif %}
