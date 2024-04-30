@@ -1,26 +1,26 @@
 import dataclasses
 import datetime
 
-import zodchy
+from zodchy import codex
 from zodchy_patterns import events
 
 from .. import types
 
 
 @dataclasses.dataclass
-class CreateSomething(zodchy.codex.Command):
+class CreateSomething(codex.cqea.Command):
     name: str
 
 
 @dataclasses.dataclass
-class UpdateSomething(zodchy.codex.Command):
+class UpdateSomething(codex.cqea.Command):
     id: types.IdentifierType
     name: str | types.NoValueType = types.NoValueType
     state: types.AcmeState | types.NoValueType = types.NoValueType
 
 
 @dataclasses.dataclass
-class SomethingCreated(zodchy.codex.BDEvent):
+class SomethingCreated(codex.cqea.BDEvent):
     id: types.IdentifierType
     name: str
 
@@ -43,14 +43,14 @@ class LinkingSomethingFailed(events.HttpError):
 
 
 @dataclasses.dataclass
-class GetListOfSomething(zodchy.codex.Query):
-    id: zodchy.codex.query.ClauseBit[types.IdentifierType] | None = None
-    name: zodchy.codex.query.ClauseBit[str] | None = None
-    state: zodchy.codex.query.ClauseBit[types.AcmeState] | None = None
-    created_at: zodchy.codex.query.ClauseBit[datetime.datetime] | None = None
-    limit: zodchy.codex.query.Limit | None = None
+class GetListOfSomething(codex.cqea.Query):
+    id: codex.query.ClauseBit[types.IdentifierType] | None = None
+    name: codex.query.ClauseBit[str] | None = None
+    state: codex.query.ClauseBit[types.AcmeState] | None = None
+    created_at: codex.query.ClauseBit[datetime.datetime] | None = None
+    limit: codex.query.Limit | None = None
 
 
 @dataclasses.dataclass
-class GetSomething(zodchy.codex.Query):
+class GetSomething(codex.cqea.Query):
     id: types.IdentifierType

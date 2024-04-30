@@ -1,5 +1,5 @@
-import zodchy
 import zodchy_fastapi
+from zodchy import codex
 from fastapi.exceptions import RequestValidationError
 
 from . import (
@@ -10,7 +10,7 @@ from . import (
 
 
 def api(
-    cqrs_factory: zodchy.codex.CQRSFactory,
+    cqrs_factory: codex.cqea.CQRSFactory,
     jwt_secret: str
 ) -> contracts.Application:
     api_app = contracts.Application()

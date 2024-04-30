@@ -3,7 +3,7 @@ import enum
 import uuid
 import zodchy
 
-NoValueType = zodchy.codex.NoValueType
+NoValueType = zodchy.types.Empty
 IdentifierType = uuid.UUID
 RandomIdentifierType = typing.NewType("RandomIdentifier", uuid.UUID)
 

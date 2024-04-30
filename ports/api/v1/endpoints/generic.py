@@ -1,5 +1,5 @@
-import zodchy
 import zodchy_patterns
+from zodchy import codex
 
 import specs
 import settings
@@ -7,7 +7,7 @@ from .. import contracts
 
 
 async def execute_command(
-    message: zodchy.codex.Command,
+    message: codex.cqea.Command,
     request: contracts.Request
 ):
     async with request.app.cqrs_factory.get_processor(
@@ -17,7 +17,7 @@ async def execute_command(
 
 
 def format_response(
-    stream: zodchy.codex.EventStream
+    stream: codex.cqea.EventStream
 ):
     data = None
     for event in filter(lambda x: isinstance(x, zodchy_patterns.events.HttpEvent), stream):

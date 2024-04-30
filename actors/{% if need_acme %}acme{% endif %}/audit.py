@@ -6,7 +6,7 @@ import specs
 
 
 def create(
-    frame: codex.Frame[specs.messages.CreateSomething, specs.context.CreateSomethingAuditContext],
+    frame: codex.cqea.Frame[specs.messages.CreateSomething, specs.context.CreateSomethingAuditContext],
     auth_context: specs.context.RequestAuthContext
 ) -> specs.messages.CreateSomething | events.HttpAuthError:
     if frame.context.owner_id != auth_context.user_id:
