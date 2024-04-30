@@ -7,7 +7,7 @@ from . import generic
 
 async def create(
     request: contracts.Request,
-    payload: contracts.schema.acme.CreateItemRequest
+    payload: contracts.schema.items.CreateItemRequest
 ):
     stream = await generic.execute_command(
         message=specs.messages.CreateItem(
@@ -20,12 +20,12 @@ async def create(
 
 async def update(
     request: contracts.Request,
-    something_id: specs.types.IdentifierType,
-    payload: contracts.schema.acme.UpdateItemRequest
+    item_id: specs.types.IdentifierType,
+    payload: contracts.schema.items.UpdateItemRequest
 ):
     stream = await generic.execute_command(
         specs.messages.UpdateItem(
-            id=something_id,
+            id=item_id,
             **payload.model_dump(exclude_unset=True)
         ),
         request=request
@@ -35,7 +35,7 @@ async def update(
 
 async def roster(
     request: contracts.Request,
-    payload: typing.Annotated[contracts.schema.acme.ItemListRequest, contracts.Embedded()],
+    payload: typing.Annotated[contracts.schema.items.ItemListRequest, contracts.Embedded()],
 ):
     stream = await generic.execute_command(
         message=payload(specs.messages.GetItems),

@@ -9,7 +9,7 @@ from ports.rdbs import schema
 
 # Add here functions to extract context from events to store it with event
 context_extractor_registry = {
-    {% if need_acme %}specs.messages.UpdateSomething: lambda m: {'name': m.name, 'state': m.state.value}, {% endif %}
+    {% if need_acme %}specs.messages.UpdateItem: lambda m: {'name': m.name, 'state': m.state.value}, {% endif %}
 }
 
 
