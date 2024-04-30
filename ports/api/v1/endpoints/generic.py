@@ -20,20 +20,20 @@ def format_response(
     stream: zodchy.codex.EventStream
 ):
     data = None
-    for event in filter(lambda x: isinstance(x, zodchy_patterns.HTTPResponseEvent), stream):
+    for event in filter(lambda x: isinstance(x, zodchy_patterns.events.HttpEvent), stream):
         data = event
-        if isinstance(event, zodchy_patterns.ErrorResponseEvent):
+        if isinstance(event, zodchy_patterns.events.HttpError):
             break
     if data:
         if data.get_content() is None:
-            return ports.api.v1.contracts.payload.EmptyResponse(status_code=data.get_status_code())
+            return contracts.payload.EmptyResponse(status_code=data.get_status_code())
         else:
-            return ports.api.v1.contracts.payload.ORJSONResponse(
+            return contracts.payload.ORJSONResponse(
                 status_code=data.get_status_code(),
                 content=data.get_content()
             )
     else:
-        return ports.api.v1.contracts.payload.EmptyResponse(status_code=200)
+        return contracts.payload.EmptyResponse(status_code=200)
 
 
 def _build_auth_context(request: contracts.Request) -> specs.context.RequestAuthContext:
