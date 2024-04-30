@@ -1,12 +1,12 @@
 {% if need_acme %}
-from .acme import (
-    CreateSomething,
-    UpdateSomething,
-    SomethingCreated,
-    SomethingLinkedWithExternalService,
-    LinkingSomethingFailed,
-    SomeItemReceived,
-    GetListOfSomething,
-    GetSomething
+from .items import (
+    CreateItem,
+    UpdateItem,
+    ItemCreated,
+    ItemLinkedWithExternalService,
+    ItemReceived,
+    ItemLinkingFailed,
+    GetItemList,
+    GetItem
 )
 {% endif %}

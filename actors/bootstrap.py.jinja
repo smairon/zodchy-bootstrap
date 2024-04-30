@@ -2,7 +2,7 @@ import pancho
 {% if need_events or need_acme %}
 from . import (
 {% if need_events %}system{% endif %}{% if need_acme %},
-    acme
+    items
 {% endif %}
 )
 {% endif %}
@@ -10,6 +10,6 @@ from . import (
 def registry() -> pancho.ActorRegistry:
     _registry = pancho.ActorRegistry()
     {% if need_events %}_registry = pancho.register_module(_registry, system){% endif %}{% if need_acme %}
-    _registry = pancho.register_module(_registry, acme)
+    _registry = pancho.register_module(_registry, items)
     {% endif %}
     return _registry

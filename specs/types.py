@@ -3,7 +3,7 @@ import enum
 import uuid
 import zodchy
 
-NoValueType = zodchy.types.Empty
+Empty = zodchy.types.Empty
 IdentifierType = uuid.UUID
 RandomIdentifierType = typing.NewType("RandomIdentifier", uuid.UUID)
 
@@ -13,7 +13,7 @@ class SomeKind(str, enum.Enum):
     small = "small"
 
 
-class AcmeState(str, enum.Enum):
+class ItemState(str, enum.Enum):
     new = "new"
     active = "active"
     deactivated = "deactivated"

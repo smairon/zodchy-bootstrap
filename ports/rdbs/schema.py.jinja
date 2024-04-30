@@ -5,8 +5,8 @@ from sqlalchemy_schema_factory import factory
 db_metadata = factory.metadata()
 
 {% if need_acme %}
-acme = factory.actions_tracked_table(
-    name='acme',
+item = factory.actions_tracked_table(
+    name='items',
     db_metadata=db_metadata,
     columns=(
         factory.uuid_primary_key(),
@@ -16,10 +16,10 @@ acme = factory.actions_tracked_table(
     )
 )
 
-acme_state = zodchy_patterns.mapping.Reference({
-    1: specs.types.AcmeState.new,
-    2: specs.types.AcmeState.active,
-    3: specs.types.AcmeState.deactivated
+item_state = zodchy_patterns.mapping.Reference({
+    1: specs.types.ItemState.new,
+    2: specs.types.ItemState.active,
+    3: specs.types.ItemState.deactivated
 })
 {% endif %}
 {% if need_events %}

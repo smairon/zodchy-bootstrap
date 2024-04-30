@@ -1,0 +1,64 @@
+import dataclasses
+import datetime
+
+from zodchy import codex
+from zodchy_patterns import events
+
+from .. import types
+
+
+# ------------- Commands ---------------
+@dataclasses.dataclass
+class CreateItem(codex.cqea.Command):
+    name: str
+
+
+@dataclasses.dataclass
+class UpdateItem(codex.cqea.Command):
+    id: types.IdentifierType
+    name: str | types.Empty = types.Empty
+    state: types.ItemState | types.Empty = types.Empty
+
+
+# ---------- Queries --------------
+@dataclasses.dataclass
+class GetItemList(codex.cqea.Query):
+    id: codex.query.ClauseBit[types.IdentifierType] | None = None
+    name: codex.query.ClauseBit[str] | None = None
+    state: codex.query.ClauseBit[types.ItemState] | None = None
+    created_at: codex.query.ClauseBit[datetime.datetime] | None = None
+    limit: codex.query.Limit | None = None
+
+
+@dataclasses.dataclass
+class GetItem(codex.cqea.Query):
+    id: types.IdentifierType
+
+
+# ------------- Events ---------------
+@dataclasses.dataclass
+class ItemCreated(codex.cqea.BDEvent):
+    id: types.IdentifierType
+    name: str
+
+
+@dataclasses.dataclass
+class ItemLinkedWithExternalService(events.HttpInfo):
+    id: types.IdentifierType
+    name: str
+    external_id: types.IdentifierType
+
+
+@dataclasses.dataclass
+class ItemLinkingFailed(events.HttpError):
+    pass
+
+
+@dataclasses.dataclass
+class ItemReceived(events.HttpItemInfo):
+    pass
+
+
+@dataclasses.dataclass
+class ItemsReceived(events.HttpPaginatedListInfo):
+    pass

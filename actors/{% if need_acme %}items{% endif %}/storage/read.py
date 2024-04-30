@@ -5,18 +5,18 @@ import specs
 
 
 async def item_reader(
-    some: specs.messages.GetSomething,
+    item: specs.messages.GetItem,
     client: specs.contracts.ReadClientContract
-) -> specs.messages.SomeItemReceived:
+) -> specs.messages.ItemReceived:
     invoice = specs.contracts.ReadInvoice(
-        "acme",
+        "items",
         "id",
         "name",
         "external_id",
-        hermitage.Clause("id", hermitage.query.EQ(some.id))
+        hermitage.Clause("id", hermitage.query.EQ(item.id))
     )
     view = await client(invoice)
     data = streamlord.pipe(view.data).collect(streamlord.collectors.first)
-    return specs.messages.SomeItemReceived(
+    return specs.messages.ItemReceived(
         data=data
     )

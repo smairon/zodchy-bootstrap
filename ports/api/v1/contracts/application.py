@@ -1,10 +1,10 @@
 import fastapi
-from zodchy import codex
+import specs
 
 
 class Application(fastapi.FastAPI):
-    cqrs_factory: codex.cqea.CQRSFactory
-    identifiers_factory: codex.cqea.IdentifiersFactory
+    cqrs_factory: specs.contracts.CQRSFactoryContract
+    identifiers_factory: specs.contracts.IdentifiersFactoryContract
     jwt_secret: str
 
 

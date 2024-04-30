@@ -3,13 +3,12 @@ import hermitage
 import specs
 
 
-
 async def creation_writer(
-    message: specs.messages.SomethingLinkedWithExternalService,
+    message: specs.messages.ItemLinkedWithExternalService,
     client: specs.contracts.WriteClientContract
 ):
     invoice = specs.contracts.WriteInvoice(
-        "acme",
+        "items",
         hermitage.Row(
             id=message.id,
             name=message.name,
