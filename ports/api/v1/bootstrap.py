@@ -11,6 +11,7 @@ from . import (
 
 def api(
     cqrs_factory: specs.contracts.CQRSFactoryContract,
+    query_adapter: specs.contracts.QueryAdapterContract,
     jwt_secret: str
 ) -> contracts.Application:
     api_app = contracts.Application()
@@ -19,6 +20,7 @@ def api(
     api_app.include_router(_bootstrap_router())
     api_app.jwt_secret = jwt_secret
     api_app.cqrs_factory = cqrs_factory
+    api_app.query_adapter = query_adapter
     return api_app
 
 

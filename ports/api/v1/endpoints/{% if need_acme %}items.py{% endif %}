@@ -38,7 +38,7 @@ async def roster(
     payload: typing.Annotated[contracts.schema.items.ItemListRequest, contracts.Embedded()],
 ):
     stream = await generic.execute_command(
-        message=payload(specs.messages.GetItems),
+        message=request.app.query_adapter(payload, specs.messages.GetItems),
         request=request
     )
     return generic.format_response(stream)

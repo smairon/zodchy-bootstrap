@@ -1,4 +1,5 @@
 from .service import (
+    QueryAdapterContract,
     IdentifiersFactoryContract,
     CQRSFactoryContract
 )

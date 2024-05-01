@@ -13,5 +13,6 @@ def app_v1():
             db_pool_dsn=db_pool_config.dsn,
             actors_registry=actors.bootstrap.registry()
         ),
-        jwt_secret=encryption_config.jwt_secret_value
+        jwt_secret=encryption_config.jwt_secret_value,
+        query_adapter=provision.query_adapter
     )

@@ -1,5 +1,5 @@
-import uuid
 import specs
+import settings
 
 
 async def create_item_context(
@@ -8,5 +8,5 @@ async def create_item_context(
     # get some information about desired user
     # owner_id = some_client.get_owner_id(message.name)
     return specs.context.CreateItemAuditContext(
-        user_id=uuid.uuid4()
+        user_id=settings.EXAMPLE_USER
     )
