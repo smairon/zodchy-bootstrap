@@ -1,0 +1,10 @@
+{% if need_acme %}
+import zodchy_patterns
+from .. import types
+
+item_state = zodchy_patterns.mapping.Reference({
+    1: types.ItemState.new,
+    2: types.ItemState.active,
+    3: types.ItemState.deactivated
+})
+{% endif %}

@@ -22,7 +22,7 @@ class UpdateItem(codex.cqea.Command):
 
 # ---------- Queries --------------
 @dataclasses.dataclass
-class GetItemList(codex.cqea.Query):
+class GetItems(codex.cqea.Query):
     id: codex.query.ClauseBit[types.IdentifierType] | None = None
     name: codex.query.ClauseBit[str] | None = None
     state: codex.query.ClauseBit[types.ItemState] | None = None

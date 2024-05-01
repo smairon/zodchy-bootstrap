@@ -3,5 +3,6 @@ from . import (
     context,
     types,
     configs,
-    contracts
+    contracts,
+    mappings
 )

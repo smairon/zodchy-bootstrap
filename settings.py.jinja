@@ -18,5 +18,5 @@ API_PATH_V1 = "/api/v1"
 
 JWT_ALGORITHM = "HS256"
 ISSUER = ''
-
+{% if need_acme %}EXAMPLE_USER = uuid.UUID("c3972ba8-a399-4e83-82dd-e26ce528c381"){% endif %}
 SYSTEM_USER = uuid.UUID("00000000-00000000-00000000-00000001")

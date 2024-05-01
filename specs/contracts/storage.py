@@ -21,3 +21,4 @@ class ReadInvoice(hermitage.Invoice):
 
 class WriteInvoice(hermitage.Invoice):
     pass
+

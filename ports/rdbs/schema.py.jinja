@@ -1,6 +1,4 @@
 from sqlalchemy_schema_factory import factory
-{% if need_acme %}import zodchy_patterns{% endif %}
-{% if need_acme %}import specs{% endif %}
 
 db_metadata = factory.metadata()
 
@@ -15,12 +13,6 @@ item = factory.actions_tracked_table(
         factory.uuid(name="external_id", nullable=False, unique=True)
     )
 )
-
-item_state = zodchy_patterns.mapping.Reference({
-    1: specs.types.ItemState.new,
-    2: specs.types.ItemState.active,
-    3: specs.types.ItemState.deactivated
-})
 {% endif %}
 {% if need_events %}
 event = factory.actions_tracked_table(
