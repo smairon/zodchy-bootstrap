@@ -8,7 +8,7 @@ TAGS = ['Acme']
 v1.add_api_route(
     path='/items',
     endpoint=items.create,
-    responses=router.response_schema(schema.items.ItemCreatedResponse, 422, 500),
+    responses=router.response_schema(schema.items.response.ItemCreatedResponse, 422, 500),
     methods=['POST'],
     tags=TAGS
 )
@@ -24,7 +24,7 @@ v1.add_api_route(
 v1.add_api_route(
     path='/items',
     endpoint=items.roster,
-    responses=router.response_schema(schema.items.ItemListResponse, 500),
+    responses=router.response_schema(schema.items.response.ItemListResponse, 500),
     methods=['GET'],
     tags=TAGS
 )
@@ -32,7 +32,7 @@ v1.add_api_route(
 v1.add_api_route(
     path='/items/{item_id}',
     endpoint=items.item,
-    responses=router.response_schema(schema.items.ItemResponse, 500),
+    responses=router.response_schema(schema.items.response.ItemResponse, 500),
     methods=['GET'],
     tags=TAGS
 )

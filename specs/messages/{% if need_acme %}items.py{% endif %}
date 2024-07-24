@@ -16,8 +16,8 @@ class CreateItem(codex.cqea.Command):
 @dataclasses.dataclass
 class UpdateItem(codex.cqea.Command):
     id: types.IdentifierType
-    name: str | types.Empty = types.Empty
-    state: types.ItemState | types.Empty = types.Empty
+    name: str | types.NoValue = types.NoValue
+    state: types.ItemState | types.NoValue = types.NoValue
 
 
 # ---------- Queries --------------

@@ -2,9 +2,13 @@ import uuid
 from typing import Annotated
 
 import pydantic
-from zodchy_fastapi.contracts import RequestModel
-from zodchy_fastapi.contracts import request
 import specs
+from zodchy_fastapi.request.schema import (
+    RequestModel,
+    FilterParam,
+    OrderParam,
+    LimitParam
+)
 
 
 class CreateItemRequest(RequestModel):
@@ -12,11 +16,11 @@ class CreateItemRequest(RequestModel):
 
 
 class ItemListRequest(RequestModel):
-    id: Annotated[str | None, request.FilterParam(uuid.UUID)] = None
-    name: Annotated[str | None, request.FilterParam(str)] = None
-    state: Annotated[str | None, request.FilterParam(specs.types.ItemState)] = None
-    order_by: Annotated[str | None, request.OrderParam("name", "id")] = None
-    limit: Annotated[str | None, request.LimitParam()] = None
+    id: Annotated[str | None, FilterParam(uuid.UUID)] = None
+    name: Annotated[str | None, FilterParam(str)] = None
+    state: Annotated[str | None, FilterParam(specs.types.ItemState)] = None
+    order_by: Annotated[str | None, OrderParam("name", "id")] = None
+    limit: Annotated[str | None, LimitParam()] = None
 
 
 class UpdateItemRequest(RequestModel):

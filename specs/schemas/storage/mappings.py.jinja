@@ -2,7 +2,7 @@
 import zodchy_patterns
 from .. import types
 
-item_state = zodchy_patterns.mapping.Reference({
+item_state = zodchy_patterns.mapping.DuplexMap({
     1: types.ItemState.new,
     2: types.ItemState.active,
     3: types.ItemState.deactivated

@@ -1,13 +1,12 @@
-import fastapi
 import specs
+import zodchy_fastapi
 
 
-class Application(fastapi.FastAPI):
-    cqrs_factory: specs.contracts.CQRSFactoryContract
-    query_adapter: specs.contracts.QueryAdapterContract
+class Application(zodchy_fastapi.contracts.Application):
+    cqrs_factory: specs.services.CQRSFactoryContract
     identifiers_factory: specs.contracts.IdentifiersFactoryContract
     jwt_secret: str
 
 
-class Request(fastapi.Request):
+class Request(zodchy_fastapi.contracts.Request):
     app: Application

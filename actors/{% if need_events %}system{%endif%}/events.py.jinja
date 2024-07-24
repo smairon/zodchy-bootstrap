@@ -22,14 +22,16 @@ async def event_keeper(
         for _type in type(event).__mro__:
             if executor := context_extractor_registry.get(_type):
                 data.append(
-                    hermitage.Row(
-                        id=uuid.uuid4(),
-                        name=_type.__name__,
-                        **executor(event)
+                    hermitage.notation.Item(
+                        dict(
+                            id=uuid.uuid4(),
+                            name=_type.__name__,
+                            **executor(event)
+                        )
                     )
                 )
     if data:
-        invoice = specs.contracts.WriteInvoice(
+        invoice = specs.patterns.WriteInvoice(
             schema.event.name,
             *data
         )

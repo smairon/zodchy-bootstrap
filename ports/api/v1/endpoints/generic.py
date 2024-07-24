@@ -1,5 +1,5 @@
+import zodchy
 import zodchy_patterns
-from zodchy import codex
 
 import specs
 import settings
@@ -7,7 +7,7 @@ from .. import contracts
 
 
 async def execute_command(
-    message: codex.cqea.Command,
+    message: zodchy.codex.cqea.Command,
     request: contracts.Request
 ):
     async with request.app.cqrs_factory.get_processor(
@@ -16,8 +16,14 @@ async def execute_command(
         return await cp(message)
 
 
+def _build_auth_context(request: contracts.Request) -> specs.context.RequestAuthContext:
+    return specs.context.RequestAuthContext(
+        user_id=request.scope.get('user_id') or settings.SYSTEM_USER
+    )
+
+
 def format_response(
-    stream: codex.cqea.EventStream
+    stream: zodchy.codex.cqea.EventStream
 ):
     data = None
     for event in filter(lambda x: isinstance(x, zodchy_patterns.events.HttpEvent), stream):
@@ -34,9 +40,3 @@ def format_response(
             )
     else:
         return contracts.payload.EmptyResponse(status_code=200)
-
-
-def _build_auth_context(request: contracts.Request) -> specs.context.RequestAuthContext:
-    return specs.context.RequestAuthContext(
-        user_id=request.scope.get('user_id') or settings.SYSTEM_USER
-    )

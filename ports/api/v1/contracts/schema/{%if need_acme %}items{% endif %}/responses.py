@@ -1,29 +1,29 @@
 import uuid
 
 from zodchy_fastapi.contracts import (
-    ResponseModel,
+    ResponseData,
+    ItemResponseModel,
     PaginatedResponseModel,
-    DataModel
 )
 
 import specs
 
 
-class ItemCreated(DataModel):
+class ItemCreated(ResponseData):
     id: uuid.UUID
 
 
-class ItemListItem(DataModel):
+class ItemListItem(ResponseData):
     id: specs.types.IdentifierType
     name: str
     state: specs.types.ItemState
 
 
-class Item(ItemListItem):
+class Item(ItemResponseModel):
     external_id: specs.types.IdentifierType
 
 
-class ItemCreatedResponse(ResponseModel):
+class ItemCreatedResponse(ItemResponseModel):
     data: ItemCreated
 
 

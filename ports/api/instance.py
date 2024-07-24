@@ -1,18 +1,20 @@
+import settings
+import os
+import uvicorn
 import specs
-import actors
-import provision
 
-from ports.api import v1
+from . import v1
 
 
-def app_v1():
-    db_pool_config = specs.configs.storage.rdbs.DBPoolConfig()
-    encryption_config = specs.configs.security.JWTConfig()
-    return v1.bootstrap.api(
-        cqrs_factory=provision.generic_cqrs(
-            db_pool_dsn=db_pool_config.dsn,
-            actors_registry=actors.bootstrap.registry()
-        ),
-        jwt_secret=encryption_config.jwt_secret_value,
-        query_adapter=provision.query_adapter
+def launch(cqrs_factory: specs.services.CQRSFactoryContract, jwt_secret: str):
+    host = os.environ.get('APP_HOST') or settings.APP_HOST
+    port = int(os.environ.get('APP_PORT')) if os.environ.get('APP_PORT') else settings.APP_PORT
+    workers_num = int(os.environ.get('WORKERS_NUM')) if os.environ.get('WORKERS_NUM') else settings.APP_WORKERS_NUM
+    uvicorn.run(
+        app=v1.bootstrap.api(cqrs_factory, jwt_secret),
+        host=host,
+        port=port,
+        workers=workers_num,
+        proxy_headers=True,  # TODO: Add X-Real-IP to nginx config
+        reload=os.environ.get('RELOAD') or False,
     )

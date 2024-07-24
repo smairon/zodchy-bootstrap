@@ -3,13 +3,18 @@ import enum
 import uuid
 import zodchy
 
-Empty = zodchy.types.Empty
-IdentifierType = uuid.UUID
-RandomIdentifierType = typing.NewType("RandomIdentifier", uuid.UUID)
+NoValue: typing.TypeAlias = zodchy.types.Empty
+IdentifierType: typing.TypeAlias = uuid.UUID
+
+
+class RandomIdentifier(uuid.UUID):
+    pass
 
 {% if need_acme %}
+
 class ItemState(str, enum.Enum):
     new = "new"
     active = "active"
     deactivated = "deactivated"
+
 {% endif %}

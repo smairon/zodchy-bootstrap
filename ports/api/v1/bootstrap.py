@@ -1,4 +1,6 @@
 import zodchy_fastapi
+import zodchy_notations
+import zodchy_patterns
 from fastapi.exceptions import RequestValidationError
 
 import specs
@@ -9,18 +11,32 @@ from . import (
 )
 
 
+def picker(stream) -> zodchy_patterns.events.HttpEvent | None:
+    data = None
+    for event in filter(lambda x: isinstance(x, zodchy_patterns.events.HttpEvent), stream):
+        data = event
+        if isinstance(event, zodchy_patterns.events.HttpError):
+            break
+    return data
+
+
 def api(
-    cqrs_factory: specs.contracts.CQRSFactoryContract,
-    query_adapter: specs.contracts.QueryAdapterContract,
+    cqrs_factory: specs.services.CQRSFactoryContract,
     jwt_secret: str
 ) -> contracts.Application:
     api_app = contracts.Application()
     api_app = _bootstrap_exception_handlers(api_app)
     api_app.middleware('http')(middleware.auth)
     api_app.include_router(_bootstrap_router())
+    api_app.request_adapter = zodchy_fastapi.request.Adapter(
+        query_notation_parser=zodchy_notations.query.math.Parser()
+    )
+    api_app.response_adapter = zodchy_fastapi.response.Adapter(
+        picker=picker,
+        default_response_class=contracts.payload.ORJSONResponse
+    )
     api_app.jwt_secret = jwt_secret
     api_app.cqrs_factory = cqrs_factory
-    api_app.query_adapter = query_adapter
     return api_app
 
 
@@ -35,10 +51,10 @@ def _bootstrap_exception_handlers(
 ) -> contracts.Application:
     api_app.add_exception_handler(
         RequestValidationError,
-        zodchy_fastapi.handlers.validation_exception_handler
+        zodchy_fastapi.middleware.validation_exception_handler
     )
     api_app.add_exception_handler(
         Exception,
-        zodchy_fastapi.handlers.generic_exception_handler
+        zodchy_fastapi.middleware.generic_exception_handler
     )
     return api_app
