@@ -15,7 +15,7 @@ context_extractor_registry = {
 
 async def event_keeper(
     events: collections.abc.Iterable[codex.cqea.Event],
-    client: specs.contracts.WriteClientContract,
+    client: specs.connections.rdbs.WriteClientContract,
 ):
     data = []
     for event in events:

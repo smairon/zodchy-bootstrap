@@ -1,17 +1,16 @@
 import zorge
 import hermitage
 import hermitage_alchemy
-import zodchy_security
+{% if need_authentication %}import zodchy_security{% endif %}
 import zodchy_identity
 
-import settings
 import specs
 import ports
 
 
 def generic_dc(
-    jwt_secret: str,
-    rdbs_dsn: str
+    rdbs_dsn: str{% if need_authentication %},
+    jwt_secret: str{ %endif %}
 ):
     container = zorge.Container()
     identifiers_factory = zodchy_identity.UUIDIdentifiersFactory()
@@ -23,7 +22,7 @@ def generic_dc(
         implementation=identifiers_factory.random,
         contract=specs.types.RandomIdentifier
     )
-
+    {% if need_authentication %}
     # -------------- Security dependencies ----------------------
     container.register_dependency(
         implementation=zodchy_security.JWTTokenProducer(
@@ -34,7 +33,7 @@ def generic_dc(
         contract=specs.security.AuthTokenProducerContract,
         cache_scope='container'
     )
-
+    {% endif %}
     # -------------- Services dependencies -------------------------------
     container.register_dependency(
         implementation=hermitage.adapters.CQEA(),

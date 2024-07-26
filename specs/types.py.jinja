@@ -1,10 +1,11 @@
 import typing
-import enum
+{% if need_acme %}import enum{% endif %}
 import uuid
 import zodchy
 
 NoValue: typing.TypeAlias = zodchy.types.Empty
 IdentifierType: typing.TypeAlias = uuid.UUID
+UserId: typing.TypeAlias = IdentifierType
 
 
 class RandomIdentifier(uuid.UUID):

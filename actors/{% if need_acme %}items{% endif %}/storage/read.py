@@ -7,9 +7,9 @@ import specs
 
 async def item_reader(
     query: specs.messages.GetItem,
-    client: specs.contracts.ReadClientContract
+    client: specs.connections.rdbs.ReadClientContract
 ) -> specs.messages.ItemReceived:
-    invoice = specs.contracts.ReadInvoice(
+    invoice = specs.patterns.ReadInvoice(
         "items",
         "id",
         "name",

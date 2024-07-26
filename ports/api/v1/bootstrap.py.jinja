@@ -21,8 +21,8 @@ def picker(stream) -> zodchy_patterns.events.HttpEvent | None:
 
 
 def api(
-    cqrs_factory: specs.services.CQRSFactoryContract,
-    jwt_secret: str
+    cqrs_factory: specs.services.CQRSFactoryContract{% if need_authentication %},
+    jwt_secret: str{%endif}
 ) -> contracts.Application:
     api_app = contracts.Application()
     api_app = _bootstrap_exception_handlers(api_app)
@@ -35,7 +35,9 @@ def api(
         picker=picker,
         default_response_class=contracts.payload.ORJSONResponse
     )
+    {% if need_authentication %}
     api_app.jwt_secret = jwt_secret
+    {% endif %}
     api_app.cqrs_factory = cqrs_factory
     return api_app
 

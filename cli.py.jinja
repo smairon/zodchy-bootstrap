@@ -2,16 +2,20 @@ import functools
 
 import fire
 import alembic_tools
+import pancho
 from envparse import env
 
 import specs
 import ports
+import provision
+import actors
 {% if need_authentication %}import scripts{% endif %}
 
 if __name__ == "__main__":
     env.read_envfile()
 
     migrations_pool_config = specs.configs.storage.rdbs.MigrationsPoolConfig()
+    {% if need_authentication %}encryption_config = specs.configs.security.JWTConfig(){% endif %}
     db_pool_config = specs.configs.storage.rdbs.DBPoolConfig()
 
     migrations_rdbs_args = dict(
@@ -21,7 +25,17 @@ if __name__ == "__main__":
     )
 
     fire.Fire({
-        "api:run": ports.api.run,
+        "api:run": functools.partial(
+            ports.api.launch,
+            cqrs_factory=pancho.CQRSFactory(
+                di_container=provision.generic_dc(
+                    rdbs_dsn=db_pool_config.dsn,
+                    {% if need_authentication %}jwt_secret=encryption_config.jwt_secret_value{% endif %}
+                ),
+                actor_registry=actors.bootstrap.registry()
+            ),
+            {% if need_authentication %}jwt_secret=encryption_config.jwt_secret_value{% endif %}
+        ),
         "rdbs:seed": functools.partial(ports.rdbs.seed.process, dsn=db_pool_config.dsn), {% if need_authentication %}
         "auth:token": scripts.auth.generate_access_token, {% endif %}
         "rdbs:upgrade": functools.partial(alembic_tools.commands.upgrade, **migrations_rdbs_args),

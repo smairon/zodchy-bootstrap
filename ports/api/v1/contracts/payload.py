@@ -7,8 +7,6 @@ from asyncpg import Record
 from asyncpg.pgproto.pgproto import UUID
 from fastapi.responses import JSONResponse, Response
 
-from hermitage import Row
-
 
 @singledispatch
 def convert(value):
@@ -23,11 +21,6 @@ def convert_asyncpg_record(value: Record):
 @convert.register(UUID)
 def convert_asyncpg_uuid(value: UUID):
     return str(value)
-
-
-@convert.register(Row)
-def convert_hermitage_row(value: Row):
-    return value.as_dict()
 
 
 class EmptyResponse(Response):

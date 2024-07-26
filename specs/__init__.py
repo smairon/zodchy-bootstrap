@@ -3,5 +3,9 @@ from . import (
     context,
     configs,
     services,
-    connections
+    connections,
+    security,
+    patterns,
+    identity,
+    types
 )

@@ -4,8 +4,8 @@ import zodchy_fastapi
 
 class Application(zodchy_fastapi.contracts.Application):
     cqrs_factory: specs.services.CQRSFactoryContract
-    identifiers_factory: specs.contracts.IdentifiersFactoryContract
-    jwt_secret: str
+    identifiers_factory: specs.identity.IdentifiersFactoryContract
+    {% if need_authentication %}jwt_secret: str{% endif %}
 
 
 class Request(zodchy_fastapi.contracts.Request):
